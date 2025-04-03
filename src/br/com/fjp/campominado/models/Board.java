@@ -45,7 +45,7 @@ public class Board implements FieldObserver {
     }
 
     private void notifyObservers(EventBoard event) {
-        observers.stream().forEach(o -> o.accept(new GameOver(event, this)));
+        observers.stream().forEach(o -> o.accept(new GameOver(event)));
     }
 
     public void openField(int line, int column) {
@@ -113,7 +113,7 @@ public class Board implements FieldObserver {
     }
 
     private void showLandmines() {
-        fields.stream().filter(f -> f.hasMine()).forEach(f -> f.setOpen(true));
+        fields.stream().filter(f -> f.hasMine() && !f.isChecked()).forEach(f -> f.setOpen(true));
     }
 
     public void forEachField(Consumer<Field> consumer) {
