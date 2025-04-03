@@ -44,7 +44,7 @@ public class Field {
         return this.marking;
     }
 
-    void switchMarking() {
+    public void switchMarking() {
         if(!this.open) {
             this.marking = !this.marking;
             
@@ -76,7 +76,7 @@ public class Field {
         this.mine = true;
     }
 
-    boolean open() {
+    public boolean open() {
         if(isOpen() || isChecked()) {
             return false;
         }
@@ -89,14 +89,14 @@ public class Field {
         setOpen(true);
         notifyObservers(EventField.OPEN);
         
-        if(neighborhoodIsSafe()) {
+        if(isNeighborhoodSafe()) {
             neighbors.forEach(neighbor -> neighbor.open());
         }
 
         return true;
     }
 
-    boolean neighborhoodIsSafe() {
+    public boolean isNeighborhoodSafe() {
         return neighbors.stream().noneMatch(neighbor -> neighbor.hasMine());
     }
 
@@ -107,14 +107,16 @@ public class Field {
         return discovered || protectedFromMine;
     }
 
-    long neighborsMines() {
-        return neighbors.stream().filter(n -> n.hasMine()).count();
+    public int neighborsMines() {
+        return (int) neighbors.stream().filter(n -> n.hasMine()).count();
     }
 
     void reset() {
         mine = false;
         marking = false;
         open = false;
+
+        notifyObservers(EventField.RESET);
     }
 
     public boolean addNeighbor(Field field) {
